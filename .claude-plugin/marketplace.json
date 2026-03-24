@@ -1,0 +1,11 @@
+{
+  "name": "athena",
+  "owner": {
+    "name": "Draekien Industries"
+  },
+  "metadata": {
+    "description": "Knowledge for AI systems",
+    "version": "0.1.0"
+  },
+  "plugins": []
+}
