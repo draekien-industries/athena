@@ -7,5 +7,11 @@
     "description": "Knowledge for AI systems",
     "version": "0.1.0"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "handoff",
+      "description": "Monitors context usage and creates handoff documents for seamless session continuity",
+      "directory": "handoff"
+    }
+  ]
 }

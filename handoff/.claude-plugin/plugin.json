@@ -1,0 +1,8 @@
+{
+  "name": "handoff",
+  "description": "Monitors context usage and creates handoff documents for seamless session continuity",
+  "version": "0.1.0",
+  "author": {
+    "name": "Draekien Industries"
+  }
+}
