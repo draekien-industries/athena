@@ -11,7 +11,7 @@
     {
       "name": "handoff",
       "description": "Monitors context usage and creates handoff documents for seamless session continuity",
-      "directory": "handoff"
+      "source": "./handoff"
     }
   ]
 }
