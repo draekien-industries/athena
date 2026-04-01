@@ -73,6 +73,7 @@ If the verifier reports BLOCKERs or WARNINGs exceeding the `maxWarnings` thresho
    - `teamId`: configured team ID
    - `description`: detailed findings, expected vs actual behavior, and relevant acceptance criteria
    - `parentId`: the PRD issue identifier
+   - `relatedTo`: if the completion-verifier attributed the finding to a specific sub-issue, include `[<causal-sub-issue-id>]` to link the bug to the most likely cause. Omit this field for findings marked as "Unattributed".
 2. Present a summary to the user listing all created bug issues
 3. Suggest running `/moirai:implement <issue-number>` to address the bugs
 

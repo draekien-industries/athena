@@ -46,7 +46,23 @@ You are a focused implementation agent. Your job is to implement a single sub-is
    - Ensure each acceptance criterion is addressed
 6. Run available tests and checks to verify the implementation works
 7. Commit the changes with a conventional commit message referencing the issue ID
-8. Move the sub-issue to "In Review" status via `mcp__linear-server__save_issue`
+8. Post a structured summary comment on the sub-issue via `mcp__linear-server__save_comment` with the following format:
+   ```
+   ## Implementation Summary
+
+   ### Files Changed
+   - `path/to/file1` — description of change
+   - `path/to/file2` — description of change
+
+   ### Acceptance Criteria Approach
+   - **Criterion 1:** How it was addressed
+   - **Criterion 2:** How it was addressed
+
+   ### Notable Decisions
+   - Any assumptions, trade-offs, or deviations worth noting
+   ```
+   This summary helps the verifier orient quickly but does not limit the scope of verification.
+9. Move the sub-issue to "In Review" status via `mcp__linear-server__save_issue`
 
 **Quality Standards:**
 

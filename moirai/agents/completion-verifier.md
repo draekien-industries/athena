@@ -52,6 +52,8 @@ Grade each finding as one of:
 - **BLOCKER** — A PRD goal is not met, a user story is not addressed, or critical acceptance criteria are unsatisfied
 - **WARNING** — Partial coverage, minor gaps, or implementation differs from spec in non-critical ways
 
+For each finding, attribute it to the most likely causal sub-issue by its Linear identifier. This helps trace gaps back to the implementation that introduced them. If the attribution is genuinely unclear (e.g., an integration gap spanning multiple sub-issues), mark it as "Unattributed" — do not force a match.
+
 **Output Format:**
 
 Return a structured report:
@@ -80,11 +82,13 @@ Return a structured report:
 ### Findings
 #### BLOCKERs
 1. [BLOCKER] Description
+   - Sub-Issue: <issue-identifier> or "Unattributed"
    - Expected: ...
    - Actual: ...
 
 #### WARNINGs
 1. [WARNING] Description
+   - Sub-Issue: <issue-identifier> or "Unattributed"
    - Details: ...
 
 ### Overall Verdict

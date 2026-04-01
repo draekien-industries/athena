@@ -19,7 +19,7 @@ Before starting, verify Linear MCP is available and authenticated:
 1. Call `mcp__linear-server__list_teams` and present options to the user
 2. After team selection, call `mcp__linear-server__list_issue_statuses` for that team
 3. Ask the user to map their team's statuses to: todo, inProgress, inReview, done
-4. Save the config to `.moirai/config.json` with a `$schema` reference pointing to the plugin's `schemas/config.schema.json`
+4. Save the config to `.moirai/config.json` with a `$schema` reference pointing to the plugin's `schemas/config.schema.json`. Build the schema path using the `CLAUDE_PLUGIN_DIR` environment variable: resolve `$CLAUDE_PLUGIN_DIR` to its actual value, then set `"$schema"` to `"<resolved-path>/schemas/config.schema.json"` in the written JSON. Do not write the env var literal into the file — the `$schema` value must be a concrete path for IDE autocompletion to work.
 
 ### Team Override
 
