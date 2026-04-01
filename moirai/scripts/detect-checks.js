@@ -85,7 +85,14 @@ if (fs.existsSync(pyprojectPath) || fileExists("setup.py")) {
 }
 
 // --- .NET ---
-const rootFiles = fs.readdirSync(projectRoot);
+let rootFiles = [];
+try {
+  rootFiles = fs.readdirSync(projectRoot);
+} catch {
+  // projectRoot does not exist or is not readable — skip .NET and Makefile detection
+  console.log(JSON.stringify([]));
+  process.exit(0);
+}
 if (rootFiles.some((f) => f.endsWith(".sln") || f.endsWith(".csproj"))) {
   detected.push("dotnet test");
   detected.push("dotnet build");

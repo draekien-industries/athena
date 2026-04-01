@@ -5,6 +5,8 @@ allowed-tools:
   - Grep
   - Glob
   - Bash
+  - Write
+  - Edit
   - Agent
   - AskUserQuestion
   - mcp__linear-server__*
@@ -23,5 +25,7 @@ This command:
 5. Spawns a completion verifier agent to evaluate work against every PRD goal, user story, and acceptance criterion
 6. If gaps found: creates bug sub-issues in Linear and suggests re-running `/moirai:implement`
 7. If all clear: moves PRD issue to Done and presents a success summary
+
+Bash is unrestricted (unlike `/moirai:plan`) because verification runs arbitrary shell commands from `verification.commands` in config.
 
 Follow the atropos skill's process exactly. Do not skip verification steps.

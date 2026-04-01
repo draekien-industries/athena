@@ -4,5 +4,8 @@
   "description": "Plan, implement, and verify development workflows backed by Linear issue tracking. Named after the three Greek Fates: Clotho (plan), Lachesis (implement), Atropos (verify).",
   "author": {
     "name": "Draekien Industries"
-  }
+  },
+  "keywords": ["linear", "planning", "implementation", "verification", "workflow"],
+  "repository": "https://github.com/draekien-industries/athena",
+  "license": "MIT"
 }

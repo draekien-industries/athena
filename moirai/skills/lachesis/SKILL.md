@@ -11,7 +11,7 @@ Execute Linear sub-issues in dependency-ordered waves using parallel subagents i
 
 Before starting, verify Linear MCP is available and authenticated:
 
-1. Call `the Linear MCP tool that retrieves the authenticated user` — if this fails, instruct the user to set up the Linear MCP server and exit gracefully
+1. Call `mcp__linear-server__get_authenticated_user` — if this fails, instruct the user to set up the Linear MCP server and exit gracefully
 2. Load `.moirai/config.json` from the project root — if missing, instruct the user to run `/moirai:plan` first
 
 ## Implementation Process
@@ -20,9 +20,9 @@ Before starting, verify Linear MCP is available and authenticated:
 
 The user provides a Linear issue number (the PRD issue).
 
-1. Call `the Linear MCP tool that retrieves issue details` to fetch the PRD issue
-2. Call `the Linear MCP tool that lists issues` with `parentId` set to the PRD issue to fetch all sub-issues
-3. For each sub-issue, call `the Linear MCP tool that retrieves issue details` with `includeRelations: true` to get blocking relationships
+1. Call `mcp__linear-server__get_issue` to fetch the PRD issue
+2. Call `mcp__linear-server__list_issues` with `parentId` set to the PRD issue to fetch all sub-issues
+3. For each sub-issue, call `mcp__linear-server__get_issue` with `includeRelations: true` to get blocking relationships
 
 > **Note:** Sub-issue structural validity (vertical slices, coverage, dependencies) is verified during the plan phase by clotho. Lachesis assumes well-formed issues and does not re-run structural verification. The user must provide a Linear issue number — unlike the verify phase, lachesis does not attempt to infer the issue from the current branch.
 
@@ -38,8 +38,8 @@ The user provides a Linear issue number (the PRD issue).
 
 Check for sub-issues left in intermediate states from a previous session:
 
-- **In Progress items:** Dispatch built-in Explore subagents (`Agent` with `subagent_type: "Explore"`) to assess what work was completed vs pending. Add findings as a comment on the Linear sub-issue. Then reset status to the configured `todo` status.
-- **In Review items:** Reset to the configured `todo` status (verification will run fresh).
+- **In Progress items:** Dispatch built-in Explore subagents (`Agent` with `subagent_type: "Explore"`) to assess what work was completed vs pending. Add findings as a comment on the Linear sub-issue via `mcp__linear-server__save_comment`. Then reset status to the configured `todo` status via `mcp__linear-server__save_issue`.
+- **In Review items:** Reset to the configured `todo` status via `mcp__linear-server__save_issue` (verification will run fresh).
 
 ### Step 4: Build Wave Plan
 
@@ -62,17 +62,17 @@ Dispatch up to `implementation.maxParallel` (from config, default 3) `implemente
 
 - Runs in an **isolated git worktree** (`isolation: "worktree"`) on branch `feat/<slug>/<issue-id>`
 - Receives the sub-issue content, the PRD for broader context, and the feature branch name
-- Moves the sub-issue to `inProgress` status via `the Linear MCP tool that creates or updates an issue`
+- Moves the sub-issue to `inProgress` status via `mcp__linear-server__save_issue`
 - Implements the work (code, tests, etc.)
-- Moves the sub-issue to `inReview` status via `the Linear MCP tool that creates or updates an issue`
+- Moves the sub-issue to `inReview` status via `mcp__linear-server__save_issue`
 
 #### 5b: Verify Implementations
 
 After all implementers in the wave complete, dispatch one `implementation-verifier` agent per sub-issue:
 
 - Verifier checks the implementation on the sub-issue branch against the acceptance criteria
-- **Pass:** Merge the sub-issue branch into the feature branch. Move sub-issue to `done` status. Auto-resolve merge conflicts where possible; escalate to the user only if unresolvable.
-- **Fail:** Add a comment to the Linear sub-issue with detailed findings via `the Linear MCP tool that creates or updates a comment`. Move sub-issue back to `todo` status. The sub-issue will be redispatched in the next cycle.
+- **Pass:** Merge the sub-issue branch into the feature branch. Move sub-issue to `done` status via `mcp__linear-server__save_issue`. Auto-resolve merge conflicts where possible; escalate to the user only if unresolvable.
+- **Fail:** Add a comment to the Linear sub-issue with detailed findings via `mcp__linear-server__save_comment`. Move sub-issue back to `todo` status via `mcp__linear-server__save_issue`. The sub-issue will be redispatched in the next cycle.
 
 #### 5c: Repeat
 
@@ -82,8 +82,23 @@ After verification, if any sub-issues in the wave were moved back to `todo`, re-
 
 When all sub-issues across all waves are in `done` status, report completion to the user. Suggest running `/moirai:verify <issue-number>` to validate the full implementation against the PRD.
 
+## Error Handling
+
+- **Worktree creation failure:** If `isolation: "worktree"` fails (e.g. disk space, git lock), report the error and retry once. If it fails again, fall back to running the implementer on the current branch sequentially (not in parallel) and warn the user about reduced isolation.
+- **Merge conflicts:** When merging a sub-issue branch into the feature branch, attempt auto-resolution first. If conflicts remain, present the conflicting files to the user with both sides and ask for resolution. Do not silently drop changes.
+- **Linear API failure:** If a status update via `mcp__linear-server__save_issue` fails, retry once. If it fails again, log the intended status change and continue — do not block implementation progress on a status update failure. Report all missed status updates at the end.
+- **Implementer agent crash:** If an implementer agent returns no result or errors out, treat the sub-issue as failed. Add a comment via `mcp__linear-server__save_comment` noting the agent failure and reset the sub-issue to `todo` for redispatch.
+
+## Edge Cases
+
+- **All sub-issues already done:** If every sub-issue is in `done` status, report this to the user and suggest running `/moirai:verify` instead.
+- **Single sub-issue:** If there is only one sub-issue, skip wave planning overhead — dispatch a single implementer directly.
+- **Branch already exists with diverged history:** If `feat/<slug>` exists but has diverged from the base branch, warn the user and ask whether to rebase, merge, or start fresh. Do not force-push or reset without confirmation.
+- **Max redispatch limit:** Track redispatch attempts per sub-issue. After 2 failed attempts, stop redispatching that sub-issue and escalate to the user with the accumulated verifier feedback. Do not loop indefinitely.
+- **Partial wave completion:** If some sub-issues in a wave succeed and others fail, merge the successful ones before redispatching failures. Do not hold passing work hostage to failing work.
+
 ## Additional Resources
 
 ### Reference Files
 
-- **`references/issue-template.md`** — Sub-issue body template (shared with clotho)
+- **`references/issue-template.md`** — Sub-issue body template for understanding sub-issue structure during implementation

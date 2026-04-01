@@ -68,7 +68,8 @@
           "description": "Shell commands to run during the verify phase (e.g. test, lint, typecheck, build). Auto-detected on first run if not configured.",
           "items": {
             "type": "string"
-          }
+          },
+          "minItems": 1
         }
       },
       "additionalProperties": false

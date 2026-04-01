@@ -27,4 +27,6 @@ This command:
 7. Verifies each implementation against acceptance criteria
 8. Merges passing work into the feature branch, redispatches failures
 
+Bash is unrestricted (unlike `/moirai:plan`) because implementer agents run arbitrary test, build, and lint commands that vary by project.
+
 Follow the lachesis skill's process exactly. Do not skip verification steps.
