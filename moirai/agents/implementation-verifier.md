@@ -18,8 +18,7 @@ tools:
   - Grep
   - Glob
   - Bash
-  - mcp__linear-server__save_issue
-  - mcp__linear-server__save_comment
+  - mcp__linear-server__*
 ---
 
 You are an implementation verification agent. Your job is to verify that a completed sub-issue implementation meets all of its acceptance criteria.

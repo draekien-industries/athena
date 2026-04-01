@@ -7,11 +7,7 @@ allowed-tools:
   - Bash
   - Agent
   - AskUserQuestion
-  - mcp__linear-server__get_authenticated_user
-  - mcp__linear-server__get_issue
-  - mcp__linear-server__list_issues
-  - mcp__linear-server__save_issue
-  - mcp__linear-server__save_comment
+  - mcp__linear-server__*
 argument-hint: "[issue-number]"
 ---
 

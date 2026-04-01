@@ -11,7 +11,7 @@ Evaluate all completed work against the original PRD, run automated checks, and 
 
 Before starting, verify Linear MCP is available and authenticated:
 
-1. Call `mcp__linear-server__get_authenticated_user` — if this fails, instruct the user to set up the Linear MCP server and exit gracefully
+1. Call `the Linear MCP tool that retrieves the authenticated user` — if this fails, instruct the user to set up the Linear MCP server and exit gracefully
 2. Load `.moirai/config.json` from the project root — if missing, instruct the user to run `/moirai:plan` first
 
 ## Verification Process
@@ -20,8 +20,8 @@ Before starting, verify Linear MCP is available and authenticated:
 
 The user provides a Linear issue number (the PRD issue). If not provided, attempt to infer it from the current feature branch name.
 
-1. Call `mcp__linear-server__get_issue` to fetch the PRD issue
-2. Call `mcp__linear-server__list_issues` with `parentId` to fetch all sub-issues
+1. Call `the Linear MCP tool that retrieves issue details` to fetch the PRD issue
+2. Call `the Linear MCP tool that lists issues` with `parentId` to fetch all sub-issues
 
 ### Step 2: Auto-Detect Verification Commands
 
@@ -60,7 +60,7 @@ Each finding is graded as BLOCKER or WARNING.
 
 If the verifier reports BLOCKERs or WARNINGs exceeding the `maxWarnings` threshold:
 
-1. For each gap, create a bug sub-issue under the PRD issue via `mcp__linear-server__save_issue` with:
+1. For each gap, create a bug sub-issue under the PRD issue via `the Linear MCP tool that creates or updates an issue` with:
    - `title`: descriptive bug title
    - `team`: configured team
    - `description`: detailed findings, expected vs actual behavior, and relevant acceptance criteria
@@ -72,5 +72,5 @@ If the verifier reports BLOCKERs or WARNINGs exceeding the `maxWarnings` thresho
 
 If no BLOCKERs and WARNINGs are within threshold:
 
-1. Move the PRD issue to `done` status via `mcp__linear-server__save_issue`
+1. Move the PRD issue to `done` status via `the Linear MCP tool that creates or updates an issue`
 2. Present a success summary confirming all goals, user stories, and acceptance criteria are met

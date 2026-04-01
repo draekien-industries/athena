@@ -11,7 +11,7 @@ Execute Linear sub-issues in dependency-ordered waves using parallel subagents i
 
 Before starting, verify Linear MCP is available and authenticated:
 
-1. Call `mcp__linear-server__get_authenticated_user` — if this fails, instruct the user to set up the Linear MCP server and exit gracefully
+1. Call `the Linear MCP tool that retrieves the authenticated user` — if this fails, instruct the user to set up the Linear MCP server and exit gracefully
 2. Load `.moirai/config.json` from the project root — if missing, instruct the user to run `/moirai:plan` first
 
 ## Implementation Process
@@ -20,9 +20,9 @@ Before starting, verify Linear MCP is available and authenticated:
 
 The user provides a Linear issue number (the PRD issue).
 
-1. Call `mcp__linear-server__get_issue` to fetch the PRD issue
-2. Call `mcp__linear-server__list_issues` with `parentId` set to the PRD issue to fetch all sub-issues
-3. For each sub-issue, call `mcp__linear-server__get_issue` with `includeRelations: true` to get blocking relationships
+1. Call `the Linear MCP tool that retrieves issue details` to fetch the PRD issue
+2. Call `the Linear MCP tool that lists issues` with `parentId` set to the PRD issue to fetch all sub-issues
+3. For each sub-issue, call `the Linear MCP tool that retrieves issue details` with `includeRelations: true` to get blocking relationships
 
 > **Note:** Sub-issue structural validity (vertical slices, coverage, dependencies) is verified during the plan phase by clotho. Lachesis assumes well-formed issues and does not re-run structural verification. The user must provide a Linear issue number — unlike the verify phase, lachesis does not attempt to infer the issue from the current branch.
 
@@ -62,9 +62,9 @@ Dispatch up to `implementation.maxParallel` (from config, default 3) `implemente
 
 - Runs in an **isolated git worktree** (`isolation: "worktree"`) on branch `feat/<slug>/<issue-id>`
 - Receives the sub-issue content, the PRD for broader context, and the feature branch name
-- Moves the sub-issue to `inProgress` status via `mcp__linear-server__save_issue`
+- Moves the sub-issue to `inProgress` status via `the Linear MCP tool that creates or updates an issue`
 - Implements the work (code, tests, etc.)
-- Moves the sub-issue to `inReview` status via `mcp__linear-server__save_issue`
+- Moves the sub-issue to `inReview` status via `the Linear MCP tool that creates or updates an issue`
 
 #### 5b: Verify Implementations
 
@@ -72,7 +72,7 @@ After all implementers in the wave complete, dispatch one `implementation-verifi
 
 - Verifier checks the implementation on the sub-issue branch against the acceptance criteria
 - **Pass:** Merge the sub-issue branch into the feature branch. Move sub-issue to `done` status. Auto-resolve merge conflicts where possible; escalate to the user only if unresolvable.
-- **Fail:** Add a comment to the Linear sub-issue with detailed findings via `mcp__linear-server__save_comment`. Move sub-issue back to `todo` status. The sub-issue will be redispatched in the next cycle.
+- **Fail:** Add a comment to the Linear sub-issue with detailed findings via `the Linear MCP tool that creates or updates a comment`. Move sub-issue back to `todo` status. The sub-issue will be redispatched in the next cycle.
 
 #### 5c: Repeat
 

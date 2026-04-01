@@ -11,13 +11,13 @@ Guide the user through creating a verified Product Requirements Document (PRD) a
 
 Before starting, verify Linear MCP is available and authenticated:
 
-1. Call `mcp__linear-server__get_authenticated_user` — if this fails, instruct the user to set up the Linear MCP server and exit gracefully
+1. Call `the Linear MCP tool that retrieves the authenticated user` — if this fails, instruct the user to set up the Linear MCP server and exit gracefully
 2. Load `.moirai/config.json` from the project root — if missing, run the first-run config flow (see below)
 
 ### First-Run Config Flow
 
-1. Call `mcp__linear-server__list_teams` and present options to the user
-2. After team selection, call `mcp__linear-server__list_issue_statuses` for that team
+1. Call `the Linear MCP tool that lists teams` and present options to the user
+2. After team selection, call `the Linear MCP tool that lists issue statuses` for that team
 3. Ask the user to map their team's statuses to: todo, inProgress, inReview, done
 4. Save the config to `.moirai/config.json` with a `$schema` reference pointing to the plugin's `schemas/config.schema.json`
 
@@ -83,7 +83,7 @@ The verifier checks coverage, dependencies, and vertical-ness. Evaluate results 
 
 All verification is now complete. Create the PRD issue in Linear.
 
-Call `mcp__linear-server__save_issue` with:
+Call `the Linear MCP tool that creates or updates an issue` with:
 - `title`: PRD title
 - `team`: configured team
 - `description`: full PRD content as markdown
@@ -94,7 +94,7 @@ Record the returned issue identifier for use as `parentId` in sub-issues.
 
 Create sub-issues in dependency order (blockers first) so real issue numbers can be referenced:
 
-For each sub-issue, call `mcp__linear-server__save_issue` with:
+For each sub-issue, call `the Linear MCP tool that creates or updates an issue` with:
 - `title`: sub-issue title
 - `team`: configured team
 - `description`: sub-issue content as markdown

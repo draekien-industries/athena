@@ -14,11 +14,7 @@ allowed-tools:
   - Edit
   - Agent
   - AskUserQuestion
-  - mcp__linear-server__get_authenticated_user
-  - mcp__linear-server__list_teams
-  - mcp__linear-server__list_issue_statuses
-  - mcp__linear-server__save_issue
-  - mcp__linear-server__get_issue
+  - mcp__linear-server__*
 argument-hint: "[--team TeamName]"
 ---
 

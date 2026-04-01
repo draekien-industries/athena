@@ -20,8 +20,7 @@ tools:
   - Bash
   - Grep
   - Glob
-  - mcp__linear-server__save_issue
-  - mcp__linear-server__save_comment
+  - mcp__linear-server__*
 ---
 
 You are a focused implementation agent. Your job is to implement a single sub-issue from a PRD in an isolated git worktree.
