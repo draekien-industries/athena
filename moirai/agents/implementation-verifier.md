@@ -1,6 +1,7 @@
 ---
 name: implementation-verifier
-description: Use this agent to verify that a sub-issue implementation meets its acceptance criteria after an implementer completes work. Examples:
+description: |
+  Use this agent to verify that a sub-issue implementation meets its acceptance criteria after an implementer completes work. Examples:
 
   <example>
   Context: An implementer has finished work on a sub-issue and the lachesis skill needs to verify it.

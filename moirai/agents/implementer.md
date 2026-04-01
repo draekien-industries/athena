@@ -1,6 +1,7 @@
 ---
 name: implementer
-description: Use this agent to implement a single Linear sub-issue in an isolated git worktree. Examples:
+description: |
+  Use this agent to implement a single Linear sub-issue in an isolated git worktree. Examples:
 
   <example>
   Context: The lachesis skill is executing a wave of sub-issues and needs to dispatch an implementer.

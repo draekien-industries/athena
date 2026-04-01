@@ -17,17 +17,27 @@ const path = require("path");
 const projectRoot = process.argv[2] || process.cwd();
 const detected = [];
 
-function fileExists(relativePath) {
-  return fs.existsSync(path.join(projectRoot, relativePath));
+function readFile(relativePath) {
+  try {
+    return fs.readFileSync(path.join(projectRoot, relativePath), "utf-8");
+  } catch {
+    return null;
+  }
 }
 
 function readJson(relativePath) {
+  const content = readFile(relativePath);
+  if (!content) return null;
   try {
-    const content = fs.readFileSync(
-      path.join(projectRoot, relativePath),
-      "utf-8"
-    );
     return JSON.parse(content);
+  } catch {
+    return null;
+  }
+}
+
+function listDir(dirPath) {
+  try {
+    return fs.readdirSync(dirPath);
   } catch {
     return null;
   }
@@ -52,62 +62,55 @@ if (pkg && pkg.scripts) {
 }
 
 // --- Go ---
-if (fileExists("go.mod")) {
+if (readFile("go.mod") !== null) {
   detected.push("go test ./...");
   detected.push("go vet ./...");
-  if (fileExists("golangci-lint.yml") || fileExists(".golangci.yml")) {
+  if (
+    readFile("golangci-lint.yml") !== null ||
+    readFile(".golangci.yml") !== null
+  ) {
     detected.push("golangci-lint run");
   }
 }
 
 // --- Rust ---
-if (fileExists("Cargo.toml")) {
+if (readFile("Cargo.toml") !== null) {
   detected.push("cargo test");
   detected.push("cargo clippy -- -D warnings");
   detected.push("cargo build");
 }
 
 // --- Python ---
-const pyprojectPath = path.join(projectRoot, "pyproject.toml");
-if (fs.existsSync(pyprojectPath) || fileExists("setup.py")) {
-  if (fs.existsSync(pyprojectPath)) {
-    const content = fs.readFileSync(pyprojectPath, "utf-8");
-    if (content.includes("pytest")) {
-      detected.push("pytest");
-    }
-    if (content.includes("ruff")) {
-      detected.push("ruff check .");
-    }
-    if (content.includes("mypy")) {
-      detected.push("mypy .");
+const pyproject = readFile("pyproject.toml");
+if (pyproject || readFile("setup.py") !== null) {
+  if (pyproject) {
+    const pythonTools = {
+      pytest: "pytest",
+      ruff: "ruff check .",
+      mypy: "mypy .",
+    };
+    for (const [tool, cmd] of Object.entries(pythonTools)) {
+      if (pyproject.includes(tool)) {
+        detected.push(cmd);
+      }
     }
   }
 }
 
 // --- .NET ---
-let rootFiles = [];
-try {
-  rootFiles = fs.readdirSync(projectRoot);
-} catch {
-  // projectRoot does not exist or is not readable — skip .NET and Makefile detection
-  console.log(JSON.stringify([]));
-  process.exit(0);
-}
-if (rootFiles.some((f) => f.endsWith(".sln") || f.endsWith(".csproj"))) {
+const rootFiles = listDir(projectRoot);
+if (rootFiles && rootFiles.some((f) => f.endsWith(".sln") || f.endsWith(".csproj"))) {
   detected.push("dotnet test");
   detected.push("dotnet build");
 }
 
 // --- Makefile ---
-if (fileExists("Makefile")) {
-  const makefile = fs.readFileSync(
-    path.join(projectRoot, "Makefile"),
-    "utf-8"
-  );
+const makefile = readFile("Makefile");
+if (makefile) {
   const targets = ["test", "lint", "check", "build"];
   for (const target of targets) {
     const regex = new RegExp(`^${target}\\s*:`, "m");
-    if (regex.test(makefile) && !detected.some((d) => d.includes(target))) {
+    if (regex.test(makefile)) {
       detected.push(`make ${target}`);
     }
   }

@@ -1,6 +1,7 @@
 ---
 name: sub-issue-verifier
-description: Use this agent to verify that sub-issues correctly cover the PRD before creating them in Linear. Examples:
+description: |
+  Use this agent to verify that sub-issues correctly cover the PRD before creating them in Linear. Examples:
 
   <example>
   Context: The clotho skill has sliced a PRD into sub-issues and needs verification.

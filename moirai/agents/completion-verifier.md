@@ -1,6 +1,7 @@
 ---
 name: completion-verifier
-description: Use this agent to perform final verification of all completed work against the original PRD during the verify phase. Examples:
+description: |
+  Use this agent to perform final verification of all completed work against the original PRD during the verify phase. Examples:
 
   <example>
   Context: The atropos skill needs to evaluate all implementation work against the PRD.

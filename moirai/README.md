@@ -92,6 +92,20 @@ Per sub-issue: `Todo` -> `In Progress` -> `In Review` -> `Done` (or back to `Tod
 
 Per PRD issue: Created during plan -> `Done` only when `/moirai:verify` passes clean.
 
+## .gitignore
+
+The `.moirai/` directory contains project-specific configuration and plan files. Recommended `.gitignore` settings:
+
+```gitignore
+# Moirai config contains team-specific Linear settings — commit if shared across the team
+# .moirai/config.json
+
+# Plan artifacts are temporary working files — generally exclude
+.moirai/plans/
+```
+
+Commit `config.json` if your team shares the same Linear workspace and status mappings. Exclude it if team members use different Linear teams.
+
 ## Branch Strategy
 
 ```

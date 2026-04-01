@@ -1,6 +1,7 @@
 ---
 name: prd-verifier
-description: Use this agent to verify a PRD against the user's original requirements before creating it in Linear. Examples:
+description: |
+  Use this agent to verify a PRD against the user's original requirements before creating it in Linear. Examples:
 
   <example>
   Context: The clotho skill has drafted a PRD and needs verification before pushing to Linear.
