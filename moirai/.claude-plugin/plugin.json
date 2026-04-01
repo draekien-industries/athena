@@ -1,0 +1,8 @@
+{
+  "name": "moirai",
+  "version": "0.1.0",
+  "description": "Plan, implement, and verify development workflows backed by Linear issue tracking. Named after the three Greek Fates: Clotho (plan), Lachesis (implement), Atropos (verify).",
+  "author": {
+    "name": "Draekien Industries"
+  }
+}

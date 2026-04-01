@@ -12,6 +12,11 @@
       "name": "handoff",
       "description": "Monitors context usage and creates handoff documents for seamless session continuity",
       "source": "./handoff"
+    },
+    {
+      "name": "moirai",
+      "description": "Plan, implement, and verify development workflows backed by Linear issue tracking",
+      "source": "./moirai"
     }
   ]
 }

@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Moirai Configuration",
+  "description": "Configuration for the Moirai plan-implement-verify workflow plugin",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri-reference",
+      "description": "Path to the JSON schema file for IDE autocompletion"
+    },
+    "linear": {
+      "type": "object",
+      "description": "Linear integration settings",
+      "properties": {
+        "teamId": {
+          "type": "string",
+          "description": "Linear team UUID"
+        },
+        "teamName": {
+          "type": "string",
+          "description": "Human-readable Linear team name"
+        },
+        "statuses": {
+          "type": "object",
+          "description": "Mapping of workflow phases to Linear status names. These are team-specific and discovered during first-run setup.",
+          "properties": {
+            "todo": {
+              "type": "string",
+              "description": "Linear status name for items ready to be picked up",
+              "default": "Todo"
+            },
+            "inProgress": {
+              "type": "string",
+              "description": "Linear status name for items currently being worked on",
+              "default": "In Progress"
+            },
+            "inReview": {
+              "type": "string",
+              "description": "Linear status name for items awaiting verification",
+              "default": "In Review"
+            },
+            "done": {
+              "type": "string",
+              "description": "Linear status name for completed items",
+              "default": "Done"
+            }
+          },
+          "required": ["todo", "inProgress", "inReview", "done"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["teamId", "teamName", "statuses"],
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "description": "Verification and quality gate settings",
+      "properties": {
+        "maxWarnings": {
+          "type": "integer",
+          "description": "Maximum number of warnings allowed before blocking progress. Set to -1 for advisory-only mode (warnings never block).",
+          "default": 3,
+          "minimum": -1
+        },
+        "commands": {
+          "type": "array",
+          "description": "Shell commands to run during the verify phase (e.g. test, lint, typecheck, build). Auto-detected on first run if not configured.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "implementation": {
+      "type": "object",
+      "description": "Implementation phase settings",
+      "properties": {
+        "maxParallel": {
+          "type": "integer",
+          "description": "Maximum number of concurrent implementer subagents per wave. Set to 1 for sequential execution.",
+          "default": 3,
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["linear"],
+  "additionalProperties": false
+}
