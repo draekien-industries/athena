@@ -10,7 +10,7 @@ Monitors context usage and creates handoff documents for seamless session contin
 
 ### [moirai](./moirai)
 
-Plan, implement, and verify development workflows backed by Linear issue tracking. Named after the three Greek Fates, each command maps to a phase of the development lifecycle: Clotho (`/moirai:plan`) spins the thread of what will be built, Lachesis (`/moirai:implement`) measures out the work across parallel subagents in isolated worktrees, and Atropos (`/moirai:verify`) performs the final check against the original PRD. Requires a [Linear MCP server](https://linear.app/docs/mcp#claude-code).
+Plan, implement, and verify development workflows backed by Linear issue tracking. Named after the three Greek Fates, each command maps to a phase of the development lifecycle: Clotho (`/moirai:plan`) spins the thread of what will be built, Lachesis (`/moirai:implement`) measures out the work across parallel subagents in isolated worktrees, and Atropos (`/moirai:verify`) performs the final check against the original PRD. Includes a [Linear MCP server](https://linear.app/docs/mcp#claude-code) but requires you to authenticate using `/mcp` after you add the plugin.
 
 ## Installation
 
